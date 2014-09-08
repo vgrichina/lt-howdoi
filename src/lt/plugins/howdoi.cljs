@@ -11,23 +11,30 @@
             [lt.util.js :as util])
   (:require-macros [lt.macros :refer [behavior defui]]))
 
+(defn get-cm []
+  (editor/->cm-ed (pool/last-active)))
+
 (defn append-text [text]
   (let
-    [cm (editor/->cm-ed (pool/last-active))
+    [cm (get-cm)
      current-line (.-line (.getCursor cm))]
     (.replaceRange cm text
                    (clj->js {:line (inc current-line) :ch 0})
                    (clj->js {:line (inc current-line) :ch 0}))))
 
-; TODO: Auto-append current language to search query
+; TODO: Save line handle before query (to prevent text inserted in wrong place if you move cursor while euery in progress)
 (behavior ::ask-howdoi
           :triggers #{:howdoi.ask}
           :reaction (fn [this]
-                      (let [cm (editor/->cm-ed (pool/last-active))
+                      (let [cm (get-cm)
                             current-line (.-line (.getCursor cm))
-                            current-line-text (.getLine cm current-line)]
+                            current-line-text (.getLine cm current-line)
+                            ed (pool/last-active)
+                            syntax-name (-> @ed :info :type-name)
+                            args [current-line-text syntax-name]]
+                        (notifos/working (str "Searching for: " args))
                         (proc/exec {:command "howdoi"
-                                    :args [current-line-text]
+                                    :args args
                                     :obj howdoi}))))
 
 (behavior ::on-out
@@ -35,7 +42,7 @@
           :reaction (fn [this data]
                       (let [out (.toString data)]
                         (append-text out)
-                        (notifos/set-msg! ("Done")))))
+                        (statusbar/loader-set 0))))
 
 (def howdoi (object/create (object/object* ::howdoi
                                            :name "howdoi answer"
