@@ -1,4 +1,4 @@
-(ns lt.plugins
+(ns lt.plugins.howdoi
   ; TODO: Clean-up requires
   (:require [lt.object :as object]
             [lt.objs.editor :as editor]

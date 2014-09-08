@@ -1,2 +1,1 @@
-{:+ {:app [(:lt.objs.plugins/load-js "howdoi_compiled.js")]
-     :howdoi.ask [:lt.plugins.howdoi/ask-howdoi]}}
+{:+ {:app [(:lt.objs.plugins/load-js "howdoi_compiled.js")]}}
