@@ -1,5 +1,5 @@
 {:name "howdoi"
- :version "0.0.1"
+ :version "0.0.2"
  :author "Vladimir Grichina <vgrichina@gmail.com>"
  :source "https://github.com/vgrichina/lt-howdoi"
  :desc "Write your code automatically using howdoi"
