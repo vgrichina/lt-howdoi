@@ -1,4 +1,4 @@
-(ns lt.tutorial
+(ns lt.plugins
   ; TODO: Clean-up requires
   (:require [lt.object :as object]
             [lt.objs.editor :as editor]
@@ -10,10 +10,6 @@
             [lt.objs.notifos :as notifos]
             [lt.util.js :as util])
   (:require-macros [lt.macros :refer [behavior defui]]))
-
-(def howdoi (object/create (object/object* ::howdoi
-                                           :name "howdoi answer"
-                                           :behaviors [::ask-howdoi ::on-out ::on-error])))
 
 (defn append-text [text]
   (let
@@ -40,6 +36,10 @@
                       (let [out (.toString data)]
                         (append-text out)
                         (notifos/set-msg! ("Done")))))
+
+(def howdoi (object/create (object/object* ::howdoi
+                                           :name "howdoi answer"
+                                           :behaviors [::ask-howdoi ::on-out ::on-error])))
 
 (cmd/command {:command :howdoi.ask
               :desc "Howdoi: Search current line"
